@@ -4,7 +4,7 @@
 
 #define AUTO_SCROLL_RESET_DELAY 5000 // ms to reset to top after we reach the bottom
 #define AUTO_SCROLL_DELAY 3000 // ms to wait before we start to scroll
-#define AUTO_SCROLL_SPEED 100 // ms between scrolls
+#define AUTO_SCROLL_SPEED 80 // ms between scrolls
 
 ScrollableContainer::ScrollableContainer(Window* window) : GuiComponent(window), 
 	mAutoScrollDelay(0), mAutoScrollSpeed(0), mAutoScrollAccumulator(0), mScrollPos(0, 0), mScrollDir(0, 0), mAutoScrollResetAccumulator(0)
