@@ -39,7 +39,7 @@ GuiGeneralScreensaverOptions::GuiGeneralScreensaverOptions(Window* window, const
 		if (Settings::getInstance()->getString("ScreenSaverBehavior") != "random video" && screensaver_behavior->getSelected() == "random video") {
 			// if before it wasn't risky but now there's a risk of problems, show warning
 			mWindow->pushGui(new GuiMsgBox(mWindow,
-			"The \"Random Video\" screensaver shows videos from your games.",
+			"The \"Random Video\" screensaver shows videos from your gamelist.\n\nIf you do not have videos, or if in several consecutive attempts the games it selects don't have videos it will default to black.\n\nMore options in the \"UI Settings\" > \"Video Screensaver\" menu.",
 				"OK", [] { return; }));
 		}
 		Settings::getInstance()->setString("ScreenSaverBehavior", screensaver_behavior->getSelected());
@@ -48,6 +48,18 @@ GuiGeneralScreensaverOptions::GuiGeneralScreensaverOptions(Window* window, const
 
 	ComponentListRow row;
 
+	// show filtered menu
+	row.elements.clear();
+	row.addElement(std::make_shared<TextComponent>(mWindow, "VIDEO SCREENSAVER SETTINGS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.addElement(makeArrow(mWindow), false);
+	row.makeAcceptInputHandler(std::bind(&GuiGeneralScreensaverOptions::openVideoScreensaverOptions, this));
+	addRow(row);
+
+	row.elements.clear();
+	row.addElement(std::make_shared<TextComponent>(mWindow, "SLIDESHOW SCREENSAVER SETTINGS", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
+	row.addElement(makeArrow(mWindow), false);
+	row.makeAcceptInputHandler(std::bind(&GuiGeneralScreensaverOptions::openSlideshowScreensaverOptions, this));
+	addRow(row);
 }
 
 GuiGeneralScreensaverOptions::~GuiGeneralScreensaverOptions()
@@ -61,4 +73,3 @@ void GuiGeneralScreensaverOptions::openVideoScreensaverOptions() {
 void GuiGeneralScreensaverOptions::openSlideshowScreensaverOptions() {
     mWindow->pushGui(new GuiSlideshowScreensaverOptions(mWindow, "SLIDESHOW SCREENSAVER"));
 }
-
