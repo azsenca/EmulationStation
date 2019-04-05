@@ -27,7 +27,7 @@ void GuiCollectionSystemsOptions::initializeMenu()
 	std::vector<std::string> unusedFolders = CollectionSystemManager::get()->getUnusedSystemsFromTheme();
 	if (unusedFolders.size() > 0)
 	{
-		addEntry("CREATE NEW CUSTOM COLLECTION FROM THEME", 0x777777FF, false,
+		addEntry("CREATE NEW CUSTOM COLLECTION FROM THEME", 0x777777FF, true,
 		[this, unusedFolders] {
 			auto s = new GuiSettings(mWindow, "SELECT THEME FOLDER");
 			std::shared_ptr< OptionListComponent<std::string> > folderThemes = std::make_shared< OptionListComponent<std::string> >(mWindow, "SELECT THEME FOLDER", true);
