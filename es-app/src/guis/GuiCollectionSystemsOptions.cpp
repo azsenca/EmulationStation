@@ -22,6 +22,34 @@ void GuiCollectionSystemsOptions::initializeMenu()
 
 	addSystemsToMenu();
 
+	// add "Create New Custom Collection from Theme"
+
+	std::vector<std::string> unusedFolders = CollectionSystemManager::get()->getUnusedSystemsFromTheme();
+	if (unusedFolders.size() > 0)
+	{
+		addEntry("CREATE NEW CUSTOM COLLECTION FROM THEME", 0x777777FF, true,
+		[this, unusedFolders] {
+			auto s = new GuiSettings(mWindow, "SELECT THEME FOLDER");
+			std::shared_ptr< OptionListComponent<std::string> > folderThemes = std::make_shared< OptionListComponent<std::string> >(mWindow, "SELECT THEME FOLDER", true);
+
+			// add Custom Systems
+			for(auto it = unusedFolders.cbegin() ; it != unusedFolders.cend() ; it++ )
+			{
+				ComponentListRow row;
+				std::string name = *it;
+
+				std::function<void()> createCollectionCall = [name, this, s] {
+					createCollection(name);
+				};
+				row.makeAcceptInputHandler(createCollectionCall);
+
+				auto themeFolder = std::make_shared<TextComponent>(mWindow, Utils::String::toUpper(name), Font::get(FONT_SIZE_SMALL), 0x777777FF);
+				row.addElement(themeFolder, true);
+				s->addRow(row);
+			}
+			mWindow->pushGui(s);
+		});
+	}
 
 	ComponentListRow row;
 	row.addElement(std::make_shared<TextComponent>(mWindow, "CREATE NEW CUSTOM COLLECTION", Font::get(FONT_SIZE_MEDIUM), 0x777777FF), true);
@@ -38,6 +66,10 @@ void GuiCollectionSystemsOptions::initializeMenu()
 	});
 
 	mMenu.addRow(row);
+
+	bundleCustomCollections = std::make_shared<SwitchComponent>(mWindow);
+	bundleCustomCollections->setState(Settings::getInstance()->getBool("UseCustomCollectionsSystem"));
+	mMenu.addWithLabel("GROUP UNTHEMED CUSTOM COLLECTIONS", bundleCustomCollections);
 
 	sortAllSystemsSwitch = std::make_shared<SwitchComponent>(mWindow);
 	sortAllSystemsSwitch->setState(Settings::getInstance()->getBool("SortAllSystems"));
